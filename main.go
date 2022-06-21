@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Hello, 世界")
+	num := flag.Int("n", 1050, "number")
+	flag.Parse()
+
+	fmt.Printf("Hello, %v\n", *num)
 }
