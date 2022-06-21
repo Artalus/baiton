@@ -1,44 +1,30 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
+
+	"github.com/jessevdk/go-flags"
 
 	bt "internal/baiton"
 )
 
-var filepath = flag.String("file", "", "Wait for this file")
-var delay = flag.Int("delay", 1, "Wait for D seconds between checks")
-var timeout = flag.Int("timeout", 60, "Fail if file did not appear in T seconds")
-
-func checkArgs() bool {
-	if *filepath == "" {
-		fmt.Println("ERROR: file not specified")
-		return false
-	}
-	if *delay < 0 {
-		fmt.Println("ERROR: delay should be >0")
-		return false
-	}
-	if *timeout < 0 {
-		fmt.Println("ERROR: timeout should be >0")
-		return false
-	}
-	return true
+var opts struct {
+	Delay   uint   `short:"d" value-name:"D" long:"delay" default:"1" description:"Wait for D seconds between checks"`
+	Timeout uint   `short:"t" value-name:"T" long:"timeout" default:"60" description:"Fail if file did not appear in T seconds"`
+	File    string `short:"f" value-name:"F" long:"file" default:"" description:"Wait for this file" required:"true"`
 }
 
 func main() {
-	flag.Parse()
-	checkArgs()
+	_, err := flags.Parse(&opts)
 
-	if !checkArgs() {
+	if err != nil {
 		os.Exit(1)
 	}
 
-	file := *filepath
-	d := *delay
-	t := *timeout
+	file := opts.File
+	d := opts.Delay
+	t := opts.Timeout
 
 	result := bt.WaitFile(file, d, t)
 	if result != nil {

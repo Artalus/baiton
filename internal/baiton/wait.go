@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func WaitFile(filepath string, delay_s, timeout_s int) error {
+func WaitFile(filepath string, delay_s, timeout_s uint) error {
 	timeout := time.Now().Add(time.Duration(timeout_s) * time.Second)
 	for {
 		if _, err := os.Stat(filepath); errors.Is(err, os.ErrNotExist) {
