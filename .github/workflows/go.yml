@@ -20,4 +20,6 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: "baiton-${{ matrix.os }}"
-        path: baiton
+        path: |
+          baiton
+          baiton.exe
